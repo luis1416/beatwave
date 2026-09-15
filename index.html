@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeatWave — Música</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="#"><span>♪</span> BeatWave</a>
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#explorar">Explorar</a>
+      <a href="#playlist">Playlist</a>
+    </nav>
+    <button id="themeBtn" class="icon-btn" title="Cambiar modo">☀️</button>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">TU MÚSICA, TU MOMENTO</p>
+        <h1>Deja que la música<br><span>hable por ti.</span></h1>
+        <p class="subtitle">Descubre canciones, crea tu playlist y disfruta de una experiencia musical con estilo.</p>
+        <div class="hero-buttons">
+          <button class="primary" id="heroPlay">▶ Reproducir ahora</button>
+          <button class="secondary" onclick="document.querySelector('#explorar').scrollIntoView({behavior:'smooth'})">Explorar</button>
+        </div>
+      </div>
+      <div class="disc-wrap">
+        <div class="disc"><div class="disc-center">♪</div></div>
+        <div class="sound-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
+
+    <section id="explorar" class="section">
+      <div class="section-head">
+        <div><p class="eyebrow">DESCUBRE</p><h2>Canciones populares</h2></div>
+        <button id="shuffleBtn" class="small-btn">🔀 Mezclar</button>
+      </div>
+      <div id="songs" class="song-grid"></div>
+    </section>
+
+    <section id="playlist" class="section playlist-section">
+      <div class="section-head">
+        <div><p class="eyebrow">TU COLECCIÓN</p><h2>Mi playlist</h2></div>
+        <span id="count" class="count">0 canciones</span>
+      </div>
+      <div id="playlistList" class="playlist-list">
+        <div class="empty">Tu playlist está vacía.<br><small>Presiona ♡ en una canción para agregarla.</small></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="player">
+    <div class="now">
+      <div id="playerCover" class="mini-cover">♪</div>
+      <div><strong id="playerTitle">Ninguna canción</strong><span id="playerArtist">Selecciona una canción</span></div>
+    </div>
+    <div class="controls">
+      <button id="prevBtn">⏮</button>
+      <button id="playBtn" class="play">▶</button>
+      <button id="nextBtn">⏭</button>
+    </div>
+    <div class="progress-area">
+      <span id="currentTime">0:00</span>
+      <input id="progress" type="range" min="0" max="100" value="0">
+      <span id="duration">3:42</span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
