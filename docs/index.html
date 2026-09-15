@@ -1,0 +1,94 @@
+const songs = [
+  {title:"Midnight Dreams", artist:"Nova", icon:"✦"},
+  {title:"Ocean Lights", artist:"Luna Waves", icon:"◈"},
+  {title:"Neon Drive", artist:"Kairo", icon:"◉"},
+  {title:"Green Horizon", artist:"Echo Room", icon:"◆"},
+  {title:"Afterglow", artist:"Mira", icon:"✧"},
+  {title:"Golden Hour", artist:"Solaris", icon:"●"}
+];
+
+let current = -1, playing = false, seconds = 0;
+let favorites = JSON.parse(localStorage.getItem("beatwaveFavorites") || "[]");
+
+const songBox = document.getElementById("songs");
+const playlistBox = document.getElementById("playlistList");
+const count = document.getElementById("count");
+const playBtn = document.getElementById("playBtn");
+const progress = document.getElementById("progress");
+
+function renderSongs(list=songs){
+  songBox.innerHTML = list.map((s,i)=>`
+    <article class="song">
+      <div class="cover">${s.icon}</div>
+      <div class="song-info">
+        <div><h3>${s.title}</h3><p>${s.artist}</p></div>
+        <button class="heart ${favorites.includes(s.title) ? "active":""}" onclick="toggleFavorite('${s.title}')">${favorites.includes(s.title) ? "♥":"♡"}</button>
+      </div>
+      <button class="small-btn" style="margin-top:13px;width:100%" onclick="selectSong(${songs.indexOf(s)})">▶ Escuchar</button>
+    </article>`).join("");
+}
+function renderPlaylist(){
+  if(!favorites.length){playlistBox.innerHTML='<div class="empty">Tu playlist está vacía.<br><small>Presiona ♡ en una canción para agregarla.</small></div>'}
+  else playlistBox.innerHTML=favorites.map((name)=>{let s=songs.find(x=>x.title===name);return `<div class="playlist-item"><div class="mini-cover">${s.icon}</div><div><strong>${s.title}</strong><p style="color:var(--muted);font-size:12px">${s.artist}</p></div><button class="remove" onclick="toggleFavorite('${s.title}')">✕</button></div>`}).join("");
+  count.textContent=`${favorites.length} canción${favorites.length===1?"":"es"}`;
+}
+function toggleFavorite(title){
+  favorites.includes(title) ? favorites=favorites.filter(x=>x!==title) : favorites.push(title);
+  localStorage.setItem("beatwaveFavorites",JSON.stringify(favorites)); renderSongs(); renderPlaylist();
+}
+function selectSong(i){
+  current=i; seconds=0; playing=true;
+  document.getElementById("playerTitle").textContent=songs[i].title;@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{--bg:#09090d;--card:#12121a;--text:#f7f7fb;--muted:#9898a8;--accent:#9b5cff;--accent2:#e15cff;--border:#242431}
+body{font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at 80% 10%,#24113d 0,transparent 28%),var(--bg);color:var(--text);transition:.3s}
+body.light{--bg:#f4f3f8;--card:#fff;--text:#17151e;--muted:#686574;--border:#dedce5;background:radial-gradient(circle at 80% 10%,#eadcff 0,transparent 30%),var(--bg)}
+.navbar{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 7%;border-bottom:1px solid var(--border);backdrop-filter:blur(15px);position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 78%,transparent)}
+.logo{font-size:21px;font-weight:800;color:var(--text);text-decoration:none}.logo span{color:var(--accent);font-size:30px}
+nav{display:flex;gap:30px}nav a{color:var(--muted);text-decoration:none;font-size:14px;transition:.2s}nav a:hover{color:var(--text)}
+button{font:inherit;border:0;cursor:pointer;color:inherit}.icon-btn{background:var(--card);border:1px solid var(--border);width:42px;height:42px;border-radius:50%}
+main{max-width:1200px;margin:auto;padding:0 5% 180px}.hero{min-height:570px;display:flex;align-items:center;justify-content:space-between;gap:40px}.hero-text{max-width:650px;animation:rise .8s ease}.eyebrow{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:2px;margin-bottom:14px}
+h1{font-size:clamp(44px,7vw,82px);line-height:.98;letter-spacing:-4px}h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));color:transparent;background-clip:text}
+.subtitle{color:var(--muted);max-width:550px;line-height:1.7;margin:24px 0 30px}.hero-buttons{display:flex;gap:12px}
+.primary,.secondary,.small-btn{padding:13px 19px;border-radius:12px;font-weight:700}.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;box-shadow:0 10px 30px #9b5cff33}.secondary,.small-btn{background:var(--card);border:1px solid var(--border)}
+.primary:hover,.secondary:hover,.small-btn:hover{transform:translateY(-2px)}
+.disc-wrap{width:360px;height:360px;position:relative;display:grid;place-items:center;animation:float 4s ease-in-out infinite}.disc{width:290px;height:290px;border-radius:50%;background:repeating-radial-gradient(circle,#181820 0 4px,#0d0d12 5px 8px);box-shadow:0 0 70px #9b5cff55;display:grid;place-items:center;animation:spin 8s linear infinite}.disc-center{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:34px;box-shadow:0 0 0 10px #12121acc}
+.sound-bars{position:absolute;bottom:5px;display:flex;gap:6px;align-items:end;height:45px}.sound-bars i{width:5px;background:var(--accent);border-radius:5px;animation:bars .8s ease-in-out infinite alternate}.sound-bars i:nth-child(2){height:35px;animation-delay:.1s}.sound-bars i:nth-child(3){height:22px;animation-delay:.2s}.sound-bars i:nth-child(4){height:42px;animation-delay:.3s}.sound-bars i:nth-child(5){height:28px;animation-delay:.4s}.sound-bars i:nth-child(6){height:38px;animation-delay:.5s}.sound-bars i:nth-child(7){height:20px;animation-delay:.6s}
+.section{padding-top:80px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}h2{font-size:32px;letter-spacing:-1px}.count{color:var(--muted);font-size:13px}
+.song-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.song{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;transition:.25s;animation:rise .5s ease both}.song:hover{transform:translateY(-5px);border-color:#9b5cff66}
+.cover{height:190px;border-radius:13px;margin-bottom:15px;display:grid;place-items:center;font-size:50px;background:linear-gradient(135deg,#5d35a4,#d95bcf)}.song:nth-child(2) .cover{background:linear-gradient(135deg,#163c59,#55b9e6)}.song:nth-child(3) .cover{background:linear-gradient(135deg,#5b211f,#ed7d4e)}.song:nth-child(4) .cover{background:linear-gradient(135deg,#173d28,#66c987)}.song:nth-child(5) .cover{background:linear-gradient(135deg,#40285f,#8e75e8)}.song:nth-child(6) .cover{background:linear-gradient(135deg,#514015,#e7c65d)}
+.song-info{display:flex;justify-content:space-between;align-items:center;gap:10px}.song h3{font-size:15px;margin-bottom:5px}.song p,.now span{font-size:12px;color:var(--muted)}.heart{background:transparent;font-size:22px;color:var(--muted)}.heart.active{color:#ff5c9b}
+.playlist-list{display:flex;flex-direction:column;gap:10px}.playlist-item{display:flex;align-items:center;gap:15px;background:var(--card);border:1px solid var(--border);padding:12px 15px;border-radius:13px}.mini-cover{width:45px;height:45px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center}.playlist-item .remove{margin-left:auto;background:transparent;color:var(--muted)}.empty{text-align:center;padding:35px;border:1px dashed var(--border);border-radius:15px;color:var(--muted);line-height:1.8}
+.player{position:fixed;bottom:0;left:0;right:0;height:92px;background:color-mix(in srgb,var(--card) 92%,transparent);border-top:1px solid var(--border);backdrop-filter:blur(18px);display:grid;grid-template-columns:1fr auto 1.4fr;align-items:center;gap:25px;padding:12px 6%;z-index:20}.now{display:flex;align-items:center;gap:12px}.now strong{display:block;font-size:13px;margin-bottom:5px}.controls{display:flex;align-items:center;gap:16px}.controls button{background:transparent;font-size:20px}.controls .play{width:44px;height:44px;border-radius:50%;background:var(--text);color:var(--bg);font-size:17px}.progress-area{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px}.progress-area input{width:100%;accent-color:var(--accent)}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}@keyframes float{50%{transform:translateY(-14px)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes bars{to{transform:scaleY(.35)}}
+@media(max-width:800px){nav{display:none}.hero{min-height:650px;flex-direction:column;justify-content:center;text-align:center}.hero-buttons{justify-content:center}.disc-wrap{width:280px;height:280px}.disc{width:220px;height:220px}.song-grid{grid-template-columns:1fr 1fr}.player{grid-template-columns:1fr auto;height:78px}.progress-area{display:none}}
+@media(max-width:500px){main{padding-bottom:130px}.song-grid{grid-template-columns:1fr}.navbar{padding:0 5%}.hero h1{letter-spacing:-2px}.player{padding:10px 4%;gap:10px}.now .mini-cover{width:38px;height:38px}.now strong{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+
+  document.getElementById("playerArtist").textContent=songs[i].artist;
+  document.getElementById("playerCover").textContent=songs[i].icon;
+  playBtn.textContent="❚❚";
+  progress.value=0;
+}
+function togglePlay(){
+  if(current===-1) selectSong(0); else {playing=!playing;playBtn.textContent=playing?"❚❚":"▶"}
+}
+function next(){selectSong((current+1+songs.length)%songs.length)}
+function prev(){selectSong((current-1+songs.length)%songs.length)}
+playBtn.onclick=togglePlay;
+document.getElementById("nextBtn").onclick=next;
+document.getElementById("prevBtn").onclick=prev;
+document.getElementById("heroPlay").onclick=()=>{selectSong(0);document.querySelector(".player").scrollIntoView({behavior:"smooth"})};
+document.getElementById("shuffleBtn").onclick=()=>{renderSongs([...songs].sort(()=>Math.random()-.5));};
+progress.oninput=()=>seconds=Number(progress.value)*2.22;
+setInterval(()=>{if(playing){seconds+=1;if(seconds>=222){next();return}progress.value=(seconds/222)*100;document.getElementById("currentTime").textContent=`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,"0")}`}},1000);
+
+document.getElementById("themeBtn").onclick=()=>{
+  document.body.classList.toggle("light");
+  const light=document.body.classList.contains("light");
+  document.getElementById("themeBtn").textContent=light?"🌙":"☀️";
+  localStorage.setItem("beatwaveTheme",light?"light":"dark");
+};
+if(localStorage.getItem("beatwaveTheme")==="light"){document.body.classList.add("light");document.getElementById("themeBtn").textContent="🌙"}
+renderSongs();renderPlaylist();
